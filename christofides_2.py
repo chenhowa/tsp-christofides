@@ -124,9 +124,9 @@ def nearest_neighbors(odd_cities):
 #Takes as (hopefully) a list of Cities that make up a tour
 # Returns the perfect matching edge set
 # There MUST be an even number of odd-degree vertices in a graph.
-def compute_pm_weight(tour, num_vertices):
+def compute_pm(tour):
     # This algorithm fails for small num_vertices
-
+    num_vertices = len(tour)
     #Calculate the weight of the first "perfect matching"
     perfect_match_1 = []
     M1 = 0
@@ -153,7 +153,7 @@ def compute_pm_weight(tour, num_vertices):
     else:
         return perfect_match_2
 
-
+#Calculates euclidean distance between any 2 City objects
 def euc_dist(city1, city2):
         dist = (city1.x - city2.x)**2 + (city1.y - city2.y)**2
         dist = int(round(math.sqrt(dist)))
@@ -221,7 +221,18 @@ def main():
 	print("\n\nNearest neighbors tour:")
 	view_tour_C = [city.name for city in tour_C]
 	print(view_tour_C)
+        perfect_match = compute_pm(tour_C)
 
+        #merge the edges of the mst and the perfect match
+
+        #The graph should only have vertices of even degree now, so
+        #it must have an Eulierian circuit, which is visits each edge exactly once
+        #To do this, first convert the graph to an adjacency list
+        adjacency_list = convert(merged_graph)
+
+        eurler_circuit = hierholzer(adjacency_list)
+
+        tour = clean_up(eurler_circuit)
 
 
 # # CONVERTING INPUT TO ADJACENCY MATRIX FORMAT
