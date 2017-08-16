@@ -30,6 +30,11 @@ class Edge:
 		dist = int(round(math.sqrt(dist)))
 		return dist
 
+        def swap(self):
+            tmp = self.u
+            self.u = self.v
+            self.v = tmp
+
 #Represents a Graph by storing all the Edges of that graph
 # has 2 attributes
 #   [1] V, the number of vertices in the graph
@@ -167,7 +172,6 @@ def main():
 		quit()
 	
 	fpath = sys.argv[1]
-	savepath = fpath + '.tour'
 
 	if not os.path.isfile(fpath):
 		print('File not found')
@@ -234,6 +238,9 @@ def main():
 
         tour = clean_up(eurler_circuit)
 
+	savepath = fpath + '.tour'
+        write_to_file(tour, savepath)
+
 
 # # CONVERTING INPUT TO ADJACENCY MATRIX FORMAT
 # 	adjMat = [[0 for _ in range(len(cities))] for _ in range(len(cities))]
@@ -243,6 +250,22 @@ def main():
 # 			adjMat[i][j] = temp
 # 			adjMat[j][i] = temp
 
+#As input, takes a list of Edge objects
+def convert(merged_graph, numVertices):
+   #First, initialize a properly sized list of lists
+    adjacency = []
+    for i in range(numVertices):
+        adjacency.append([])
+
+    #next, go through the list of Edge objects and update 
+    #   the adjacency list accordingly
+    for edge in merged_graph:
+        adjacency[edge.u].append(edge)
+        adjacency[edge.v].append(edge.swap())
+
+    #Return the adjacency list
+    return adjacency
+    
 
 
 
