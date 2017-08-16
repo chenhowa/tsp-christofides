@@ -190,12 +190,15 @@ def main():
 	cities = []
 	for line in fread:
 		data = line.split()
+		if data:
                 # turn all the data into integers
-		data = [int(val) for val in data]
-                #           id      x-pos       y-pos
-		curr = City(data[0], data[1], data[2])
+			data = [int(val) for val in data]
+			for val in data:
+				print(val)
+					#   id      x-pos       y-pos
+			curr = City(data[0], data[1], data[2])
                 #Add to the list of cities
-		cities.append(curr)
+			cities.append(curr)
 
         #At this point we have a complete list of cities
         #Time to build edges, 1 edge per pair of cities
