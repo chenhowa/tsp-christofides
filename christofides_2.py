@@ -30,17 +30,17 @@ class Edge:
 		dist = int(round(math.sqrt(dist)))
 		return dist
 
-        def swap(self):
-            tmp = self.u
-            self.u = self.v
-            self.v = tmp
+		def swap(self):
+			tmp = self.u
+			self.u = self.v
+			self.v = tmp
 
-        def copy(self):
-            edge = Edge(City(1, 1, 1) )
-            edge.u = self.u
-            edge.v = self.v
-            edge.w = self.w
-            return edge
+		def copy(self):
+			edge = Edge(City(1, 1, 1) )
+			edge.u = self.u
+			edge.v = self.v
+			edge.w = self.w
+			return edge
 
 #Represents a Graph by storing all the Edges of that graph
 # has 2 attributes
@@ -138,38 +138,38 @@ def nearest_neighbors(odd_cities):
 # There MUST be an even number of odd-degree vertices in a graph.
 def compute_pm(tour):
     # This algorithm fails for small num_vertices
-    num_vertices = len(tour)
+	num_vertices = len(tour)
     #Calculate the weight of the first "perfect matching"
-    perfect_match_1 = []
-    M1 = 0
-    i = 0
-    while i < (num_vertices - 1):
-        M1 = M1 + euc_dist(tour[i], tour[i+1])
-        i = i + 2
-        perfect_match_1.append(Edge( tour[i], tour[i+1] ))
+	perfect_match_1 = []
+	M1 = 0
+	i = 0
+	while i < (num_vertices - 1):
+		M1 = M1 + euc_dist(tour[i], tour[i+1])
+		i = i + 2
+		perfect_match_1.append(Edge( tour[i], tour[i+1] ))
 
     #Calculate the weight of the second "perfect matching"
     # TOO BAD THE PAPER DESCRIPTION SUCKS DONKEY @@@@
-    perfect_match_2 = []
-    M2 = 0
-    i = 1
-    while i < (num_vertices - 2):
-        M2 = M2 + euc_distance(tour[i], tour[i+1])
-        i = i + 1
-        perfect_match_2.append(Edge(tour[i], tour[i+1] ) )
-    M2 = M2 + euc_distance(tour[0], tour[num_vertices - 1] )
-    perfect_match_2.append(Edge(tour[0], tour[num_vertices - 1] ))
+	perfect_match_2 = []
+	M2 = 0
+	i = 1
+	while i < (num_vertices - 2):
+		M2 = M2 + euc_distance(tour[i], tour[i+1])
+		i = i + 1
+		perfect_match_2.append(Edge(tour[i], tour[i+1] ) )
+	M2 = M2 + euc_distance(tour[0], tour[num_vertices - 1] )
+	perfect_match_2.append(Edge(tour[0], tour[num_vertices - 1] ))
 
-    if M1 < M2:
-        return perfect_match_1
-    else:
-        return perfect_match_2
+	if M1 < M2:
+		return perfect_match_1
+	else:
+		return perfect_match_2
 
 #Calculates euclidean distance between any 2 City objects
 def euc_dist(city1, city2):
-        dist = (city1.x - city2.x)**2 + (city1.y - city2.y)**2
-        dist = int(round(math.sqrt(dist)))
-        return dist
+		dist = (city1.x - city2.x)**2 + (city1.y - city2.y)**2
+		dist = int(round(math.sqrt(dist)))
+		return dist
 
 def main():
 
@@ -232,7 +232,7 @@ def main():
 	print("\n\nNearest neighbors tour:")
 	view_tour_C = [city.name for city in tour_C]
 	print(view_tour_C)
-        perfect_match = compute_pm(tour_C)
+	perfect_match = compute_pm(tour_C)
 
     #merge the edges of the mst and the perfect match
 	merged_graph = []
@@ -241,19 +241,19 @@ def main():
 		newEdge.w = MST[i][2]
 		merged_graph[i] = newEdge
 	for edge in perfect_match:
-		merged_graph.append(edge))
+		merged_graph.append(edge)
 
         #The graph should only have vertices of even degree now, so
         #it must have an Eulierian circuit, which is visits each edge exactly once
         #To do this, first convert the graph to an adjacency list
-        adjacency_list = convert(merged_graph)
+	adjacency_list = convert(merged_graph)
 
-        euler_circuit = hierholzer(adjacency_list)
+	euler_circuit = hierholzer(adjacency_list)
 
-        tour = clean_up(eurler_circuit, numVertices)
+	tour = clean_up(eurler_circuit, numVertices)
 
 	savepath = fpath + '.tour'
-        write_to_file(tour, savepath)
+	write_to_file(tour, savepath)
 
 
 # # CONVERTING INPUT TO ADJACENCY MATRIX FORMAT
@@ -268,33 +268,33 @@ def main():
 #Takes a list of Edge objects representing an Euler circuit and removes multiple
 # visits to the same vertices
 def clean_up(euler_circuit, numVertices):
-    visited = [0] * numVertices
-    prev = 0 
-    for edge in euler_circuit:
-        # If the vertex has been visited already, remove it
-        if visited[edge.v] == 1:
-            euler_circuit.remove(edge)
-        else:
-            edge.u = prev   #ensure the edge is linked to the previous vertex
-            visited[edge.v] += 1 # Mark the latest vertex as visited
-            prev = edge.v
+	visited = [0] * numVertices
+	prev = 0 
+	for edge in euler_circuit:
+		# If the vertex has been visited already, remove it
+		if visited[edge.v] == 1:
+			euler_circuit.remove(edge)
+		else:
+			edge.u = prev   #ensure the edge is linked to the previous vertex
+			visited[edge.v] += 1 # Mark the latest vertex as visited
+			prev = edge.v
 
 
 #As input, takes a list of Edge objects
 def convert(merged_graph, numVertices):
    #First, initialize a properly sized list of lists
-    adjacency = []
-    for i in range(numVertices):
-        adjacency.append([])
+	adjacency = []
+	for i in range(numVertices):
+		adjacency.append([])
 
     #next, go through the list of Edge objects and update 
     #   the adjacency list accordingly
-    for edge in merged_graph:
-        adjacency[edge.u].append(edge)
-        adjacency[edge.v].append(edge.copy().swap())
+	for edge in merged_graph:
+		adjacency[edge.u].append(edge)
+		adjacency[edge.v].append(edge.copy().swap())
 
     #Return the adjacency list
-    return adjacency
+	return adjacency
     
 # Takes an adjacency list, where each index of the list represents a vertex
 # and each index of the list contains a list of Edge objects that start
@@ -302,40 +302,40 @@ def convert(merged_graph, numVertices):
 #Returns an ordered list of the edges in an Euler circuit of the graph
 # Uses the hierholzer algorithm for generating an Euler circuit
 def hierholzer(adjacency_list):
-    length = len(adjacency_list):
-    circuit = []
+	length = len(adjacency_list)
+	circuit = []
     #Choose a starting vertex
-    start = 0
-    cur = 0
+	start = 0
+	cur = 0
 
     # While there are still unvisited edges on the starting vertex
     # do a cycle that ends back on the starting vertex
-    while start != length:
-        first_edge = adjacency_list[start].pop()
-        circuit.append(first_edge)
+	while start != length:
+		first_edge = adjacency_list[start].pop()
+		circuit.append(first_edge)
         #Remove the duplicate edge in the other vertex's adjacency list
-        for dup in adjacency_list[first_edge.v]:
-            if dup.v == cur:
-                adjacency_list[edge.v].remove(dup)
-                break
-        cur = first_edge.v 
+		for dup in adjacency_list[first_edge.v]:
+			if dup.v == cur:
+				adjacency_list[edge.v].remove(dup)
+				break
+		cur = first_edge.v 
 
-        while cur != start:
-            edge = adjacency_list[cur].pop()
-            circuit.append(edge)
+		while cur != start:
+			edge = adjacency_list[cur].pop()
+			circuit.append(edge)
             #Remove the duplicate edge in the other vertex's adjacency list
-            for dup in adjacency_list[edge.v]:
-                if dup.v == cur:
-                    adjacency_list[edge.v].remove(dup)
-            cur = edge.v
+			for dup in adjacency_list[edge.v]:
+				if dup.v == cur:
+					adjacency_list[edge.v].remove(dup)
+			cur = edge.v
 
         #Once we get back to the starting vertex, we do another cycle
         #   if it still has more edges in its adjacency list.
         #   Otherwise we search for the next vertex that still has more
         #   edges in its adjacency list
-        if len(adjacency_list[start]) == 0:
-            start += 1
-    return circuit
+		if len(adjacency_list[start]) == 0:
+			start += 1
+	return circuit
 
 
 
