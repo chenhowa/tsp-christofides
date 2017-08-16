@@ -234,7 +234,14 @@ def main():
 	print(view_tour_C)
         perfect_match = compute_pm(tour_C)
 
-        #merge the edges of the mst and the perfect match
+    #merge the edges of the mst and the perfect match
+	merged_graph = []
+	for i in range(len(MST)):
+		newEdge = Edge(City(MST[i][0], 1, 1), City(MST[i][1], 1, 1)) #dummy city objects with dummy x and y coordinates
+		newEdge.w = MST[i][2]
+		merged_graph[i] = newEdge
+	for edge in perfect_match:
+		merged_graph.append(edge))
 
         #The graph should only have vertices of even degree now, so
         #it must have an Eulierian circuit, which is visits each edge exactly once
