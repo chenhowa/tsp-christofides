@@ -145,8 +145,8 @@ def compute_pm(tour):
 	i = 0
 	while i < (num_vertices - 1):
 		M1 = M1 + euc_dist(tour[i], tour[i+1])
+		perfect_match_1.append(Edge(tour[i], tour[i+1]))
 		i = i + 2
-		perfect_match_1.append(Edge( tour[i], tour[i+1] ))
 
     #Calculate the weight of the second "perfect matching"
     # TOO BAD THE PAPER DESCRIPTION SUCKS DONKEY @@@@
@@ -154,10 +154,10 @@ def compute_pm(tour):
 	M2 = 0
 	i = 1
 	while i < (num_vertices - 2):
-		M2 = M2 + euc_distance(tour[i], tour[i+1])
-		i = i + 1
-		perfect_match_2.append(Edge(tour[i], tour[i+1] ) )
-	M2 = M2 + euc_distance(tour[0], tour[num_vertices - 1] )
+		M2 = M2 + euc_dist(tour[i], tour[i+1])
+		i = i + 2
+		perfect_match_2.append(Edge(tour[i], tour[i+1]))
+	M2 = M2 + euc_dist(tour[0], tour[num_vertices - 1])
 	perfect_match_2.append(Edge(tour[0], tour[num_vertices - 1] ))
 
 	if M1 < M2:
@@ -242,7 +242,7 @@ def main():
 	for i in range(len(MST)):
 		newEdge = Edge(City(MST[i][0], 1, 1), City(MST[i][1], 1, 1)) #dummy city objects with dummy x and y coordinates
 		newEdge.w = MST[i][2]
-		merged_graph[i] = newEdge
+		merged_graph.append(newEdge)
 	for edge in perfect_match:
 		merged_graph.append(edge)
 
