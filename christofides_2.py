@@ -35,6 +35,13 @@ class Edge:
             self.u = self.v
             self.v = tmp
 
+        def copy(self):
+            edge = Edge(City(1, 1, 1) )
+            edge.u = self.u
+            edge.v = self.v
+            edge.w = self.w
+            return edge
+
 #Represents a Graph by storing all the Edges of that graph
 # has 2 attributes
 #   [1] V, the number of vertices in the graph
@@ -234,7 +241,7 @@ def main():
         #To do this, first convert the graph to an adjacency list
         adjacency_list = convert(merged_graph)
 
-        eurler_circuit = hierholzer(adjacency_list)
+        euler_circuit = hierholzer(adjacency_list)
 
         tour = clean_up(eurler_circuit)
 
@@ -261,11 +268,51 @@ def convert(merged_graph, numVertices):
     #   the adjacency list accordingly
     for edge in merged_graph:
         adjacency[edge.u].append(edge)
-        adjacency[edge.v].append(edge.swap())
+        adjacency[edge.v].append(edge.copy().swap())
 
     #Return the adjacency list
     return adjacency
     
+# Takes an adjacency list, where each index of the list represents a vertex
+# and each index of the list contains a list of Edge objects that start
+# at that vertex
+#Returns an ordered list of the edges in an Euler circuit of the graph
+# Uses the hierholzer algorithm for generating an Euler circuit
+def hierholzer(adjacency_list):
+    length = len(adjacency_list):
+    circuit = []
+    #Choose a starting vertex
+    start = 0
+    cur = 0
+
+    # While there are still unvisited edges on the starting vertex
+    # do a cycle that ends back on the starting vertex
+    while start != length:
+        first_edge = adjacency_list[start].pop()
+        circuit.append(first_edge)
+        #Remove the duplicate edge in the other vertex's adjacency list
+        for dup in adjacency_list[first_edge.v]:
+            if dup.v == cur:
+                adjacency_list[edge.v].remove(dup)
+                break
+        cur = first_edge.v 
+
+        while cur != start:
+            edge = adjacency_list[cur].pop()
+            circuit.append(edge)
+            #Remove the duplicate edge in the other vertex's adjacency list
+            for dup in adjacency_list[edge.v]:
+                if dup.v == cur:
+                    adjacency_list[edge.v].remove(dup)
+            cur = edge.v
+
+        #Once we get back to the starting vertex, we do another cycle
+        #   if it still has more edges in its adjacency list.
+        #   Otherwise we search for the next vertex that still has more
+        #   edges in its adjacency list
+        if len(adjacency_list[start]) == 0:
+            start += 1
+    return circuit
 
 
 
