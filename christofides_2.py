@@ -243,7 +243,7 @@ def main():
 
         euler_circuit = hierholzer(adjacency_list)
 
-        tour = clean_up(eurler_circuit)
+        tour = clean_up(eurler_circuit, numVertices)
 
 	savepath = fpath + '.tour'
         write_to_file(tour, savepath)
@@ -256,6 +256,22 @@ def main():
 # 			temp = cities[i].distance_to(cities[j])
 # 			adjMat[i][j] = temp
 # 			adjMat[j][i] = temp
+
+
+#Takes a list of Edge objects representing an Euler circuit and removes multiple
+# visits to the same vertices
+def clean_up(euler_circuit, numVertices):
+    visited = [0] * numVertices
+    prev = 0 
+    for edge in euler_circuit:
+        # If the vertex has been visited already, remove it
+        if visited[edge.v] == 1:
+            euler_circuit.remove(edge)
+        else:
+            edge.u = prev   #ensure the edge is linked to the previous vertex
+            visited[edge.v] += 1 # Mark the latest vertex as visited
+            prev = edge.v
+
 
 #As input, takes a list of Edge objects
 def convert(merged_graph, numVertices):
