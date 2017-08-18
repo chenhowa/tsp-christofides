@@ -2,7 +2,7 @@ import math
 import os
 import sys
 import copy
-
+import time
 
 #Represents a city.
 # Has three attributes
@@ -168,6 +168,9 @@ def euc_dist(city1, city2):
 
 def main():
 
+# Track start time
+	startTime = time.time()
+
 # READING INPUT FILE
 	if (len(sys.argv) != 2):
 		print('This program requires exactly one argument. Please refer to the README') # Haven't written a README yet
@@ -275,6 +278,8 @@ def main():
 	cost = cost_function(tour)
 	print(cost)
 
+	print ("Time: %s seconds" % (time.time() - startTime))
+	
 	savepath = fpath + '.tour'
 
 	fwrite = open(savepath, "w")
@@ -284,6 +289,7 @@ def main():
 
 	fread.close()
 	fwrite.close()
+
 
 def cost_function(tour):
 	cost = 0
