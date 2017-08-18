@@ -334,6 +334,7 @@ def walk(city, edges):
 			if edge.u == adjacent[0].v:
 				print("remove reverse: ", edge.u, "->", edge.v)
 				edges.remove(edge)
+				break
 		edges.remove(e)
 		path.append(e.v)
 		curr = e.v
@@ -370,7 +371,7 @@ def hierholzer(cities, edges):
 		if len(outgoing_edges(curr, edges))!= 0:
 			idx = cycle.index(curr)
 			subwalk, sub_edges = walk(curr, edges)
-			#assert subwalk[0] == subwalk[-1]
+			assert subwalk[0] == subwalk[-1]
 			cycle = cycle[:idx] + subwalk[:-1] + cycle[idx:]
 			notvisited.update(subwalk)
 	return cycle
