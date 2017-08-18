@@ -170,7 +170,8 @@ def main():
 
 # Track start time
 	startTime = time.time()
-
+	startClockTime = time.clock()
+	
 # READING INPUT FILE
 	if (len(sys.argv) != 2):
 		print('This program requires exactly one argument. Please refer to the README') # Haven't written a README yet
@@ -184,7 +185,7 @@ def main():
 
 	fread = open(fpath, "r")
 
-	print("opened file")
+	# print("opened file")
 
 	cities = []
 	for line in fread:
@@ -198,33 +199,33 @@ def main():
 
 		# At this point we have a complete list of cities
 		# Time to build edges, 1 edge per pair of cities
-	print("built cities")
+	# print("built cities")
 	edges = []
 	for i in range(len(cities)-1):
 		for j in range(i+1, len(cities)):
 			edge = Edge(cities[i], cities[j])
 			edges.append(edge)
-	print("connected edges")
+	# print("connected edges")
 
 	# Now we have a list of cities and a list of all possible edges between them.  
   	# We fuse these two lists into one data structure, a Graph
 	G = Graph(len(cities))
 	for edge in edges:
 		G.addEdge(edge)
-	print("created graph")
+	# print("created graph")
 
 
 	# STEP 0: COMPUTE MST
 	MST = G.MST()
-	print("MST: ")
-	print(MST)
-	print(len(MST))
+	# print("MST: ")
+	# print(MST)
+	# print(len(MST))
 
 	# STEP 1: FIND SET OF VERTICES (odd_vertices) WITH ODD DEGREE FROM MST
 	odd_vertices = _odd_vertices(MST, len(cities))
-	print("\n\nOdd vertices:")
-	print(odd_vertices)
-	print(len(odd_vertices))
+	# print("\n\nOdd vertices:")
+	# print(odd_vertices)
+	# print(len(odd_vertices))
   
 	odd_cities = [cities[i] for i in odd_vertices]
 	
@@ -232,53 +233,54 @@ def main():
 	# STEP 2: COMPUTE MINIMUM WEIGHT PERFECT MATCHING
 	# STEP 2.1: FIND A TOUR OVER G* (complete graph containing odd degree cities) USING NEAREST NEIGHBORS HEURISTIC
 	tour_C = nearest_neighbors(odd_cities)
-	print("\n\nNearest neighbors tour:")
+	# print("\n\nNearest neighbors tour:")
 	view_tour_C = [city.name for city in tour_C]
-	print(view_tour_C)
-	print(len(view_tour_C))
+	# print(view_tour_C)
+	# print(len(view_tour_C))
 	perfect_match = compute_pm(tour_C)
-	print("\n\nPerfect match:")
-	print(perfect_match)
-	print(len(perfect_match))
+	# print("\n\nPerfect match:")
+	# print(perfect_match)
+	# print(len(perfect_match))
 
 	# Merge the edges of the MST and the perfect match
 	merged_graph = []
 	numVertices = len(cities)
-	print("\nMST:")
+	# print("\nMST:")
 	for i in range(len(MST)):
 		newEdge = Edge(City(MST[i][0], 1, 1), City(MST[i][1], 1, 1)) #dummy city objects with dummy x and y coordinates
 		newEdge.w = MST[i][2]
 		merged_graph.append(newEdge)
-		print(newEdge)
-	print("\nPerfect Match:")
+		# print(newEdge)
+	# print("\nPerfect Match:")
 	for edge in perfect_match:
 		merged_graph.append(edge)
-		print(edge.u, edge.v)
-	print(len(merged_graph))
+		# print(edge.u, edge.v)
+	# print(len(merged_graph))
 	for i in range(len(merged_graph)):
 		merged_graph.append(merged_graph[i].swap())
-	print("\n\nMerged graph:")
-	for i in merged_graph:
-		print(i.u, "->", i.v)
-	print("\n\nLength of Merged graph:")
-	print(len(merged_graph))
+	# print("\n\nMerged graph:")
+	# for i in merged_graph:
+		# print(i.u, "->", i.v)
+	# print("\n\nLength of Merged graph:")
+	# print(len(merged_graph))
 
 	euler_circuit = hierholzer(cities, merged_graph)
-	print("\n\nEuler circuit:")
-	print(euler_circuit)
-	print(len(euler_circuit))
+	# print("\n\nEuler circuit:")
+	# print(euler_circuit)
+	# print(len(euler_circuit))
 
 	citynames, tour = clean_up(euler_circuit, cities)
-	print("after cleanup: ")
-	for city in citynames:
-		print(city)
-	print("\n\nFinal answer:")
-	print(citynames)
-	print(len(citynames))
+	# print("after cleanup: ")
+	# for city in citynames:
+		# print(city)
+	# print("\n\nFinal answer:")
+	# print(citynames)
+	# print(len(citynames))
 	cost = cost_function(tour)
-	print(cost)
+	# print(cost)
 
-	print ("Time: %s seconds" % (time.time() - startTime))
+	print ("Wall Time: %s seconds" % (time.time() - startTime))
+	print ("Process Time: %s seconds" % (time.clock() - startClockTime))
 	
 	savepath = fpath + '.tour'
 
@@ -318,7 +320,7 @@ def incoming_edges(city, edges):
 	return [edge for edge in edges if edge.v == city_name]
 
 def walk(city, edges):
-	print("all cities: ")
+	# print("all cities: ")
 	city_name = 0
 	if type(city) == int:
 		city_name = city
@@ -334,11 +336,11 @@ def walk(city, edges):
 	
 	while adjacent:
 		e = adjacent[0]
-		print("incoming edge:", adjacent[0].u, "->", adjacent[0].v)
+		# print("incoming edge:", adjacent[0].u, "->", adjacent[0].v)
 		reverse = incoming_edges(adjacent[0].u, edges)
 		for edge in reverse:
 			if edge.u == adjacent[0].v:
-				print("remove reverse: ", edge.u, "->", edge.v)
+				# print("remove reverse: ", edge.u, "->", edge.v)
 				edges.remove(edge)
 				break
 		edges.remove(e)
@@ -346,10 +348,10 @@ def walk(city, edges):
 		curr = e.v
 		adjacent = outgoing_edges(curr, edges)
 
-		for i in adjacent:
-			if (i):
-				print("outgoing edges:")
-				print(i.u, "->", i.v)
+		# for i in adjacent:
+			# if (i):
+				# print("outgoing edges:")
+				# print(i.u, "->", i.v)
 
 	return path, edges
 
@@ -357,18 +359,18 @@ def hierholzer(cities, edges):
 	assert all([(len(outgoing_edges(city, edges)) + len(incoming_edges(city,edges)))%2 == 0 for city in cities])
 	curr = cities[0]
 	
-	print("1st city of Euler circuit:")
-	print(curr.name)
+	# print("1st city of Euler circuit:")
+	# print(curr.name)
 	
 	cycle, edges = walk(curr, edges)
 
-	print("\nCities: ")
-	for city in cities:
-		print(city.name)
-	print("\nEdges: ")
-	for edge in edges:
-		print(edge.u, " -> ", edge.v, ": ", edge.w)
-	print("\nCycle:", cycle)
+	# print("\nCities: ")
+	# for city in cities:
+		# print(city.name)
+	# print("\nEdges: ")
+	# for edge in edges:
+		# print(edge.u, " -> ", edge.v, ": ", edge.w)
+	# print("\nCycle:", cycle)
 	
 	assert cycle[0] == cycle[-1]
 	notvisited = set(cycle)
