@@ -277,7 +277,7 @@ def main():
 	# print(citynames)
 	# print(len(citynames))
 	cost = cost_function(tour)
-	print("Solution: ", cost)
+	print ("Solution: ", cost)
 
 	print ("Wall Time: %s seconds" % (time.time() - startTime))
 	print ("Process Time: %s seconds" % (time.clock() - startClockTime))
