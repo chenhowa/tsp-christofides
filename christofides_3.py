@@ -186,7 +186,7 @@ def main():
 	fread = open(fpath, "r")
 
 	# print("opened file")
-
+	
 	cities = []
 	for line in fread:
 		data = line.split()
@@ -196,30 +196,25 @@ def main():
 		curr = City(data[0], data[1], data[2])
 				#Add to the list of cities
 		cities.append(curr)
-
+	
 		# At this point we have a complete list of cities
 		# Time to build edges, 1 edge per pair of cities
+		# We fuse these cities and eges into one data structure, a Graph
 	# print("built cities")
-	edges = []
+	G = Graph(len(cities))
+	
 	for i in range(len(cities)-1):
 		for j in range(i+1, len(cities)):
 			edge = Edge(cities[i], cities[j])
-			edges.append(edge)
+			G.addEdge(edge)
 	# print("connected edges")
-
-	# Now we have a list of cities and a list of all possible edges between them.  
-  	# We fuse these two lists into one data structure, a Graph
-	G = Graph(len(cities))
-	for edge in edges:
-		G.addEdge(edge)
-	# print("created graph")
-
 
 	# STEP 0: COMPUTE MST
 	MST = G.MST()
 	# print("MST: ")
 	# print(MST)
 	# print(len(MST))
+	
 
 	# STEP 1: FIND SET OF VERTICES (odd_vertices) WITH ODD DEGREE FROM MST
 	odd_vertices = _odd_vertices(MST, len(cities))
@@ -263,7 +258,7 @@ def main():
 		# print(i.u, "->", i.v)
 	# print("\n\nLength of Merged graph:")
 	# print(len(merged_graph))
-
+	
 	euler_circuit = hierholzer(cities, merged_graph)
 	# print("\n\nEuler circuit:")
 	# print(euler_circuit)
@@ -276,9 +271,10 @@ def main():
 	# print("\n\nFinal answer:")
 	# print(citynames)
 	# print(len(citynames))
+	
 	cost = cost_function(tour)
 	print ("Solution: ", cost)
-
+	
 	print ("Wall Time: %s seconds" % (time.time() - startTime))
 	print ("Process Time: %s seconds" % (time.clock() - startClockTime))
 	
